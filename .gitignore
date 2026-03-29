@@ -1,0 +1,22 @@
+# Downloaded files
+downloads/
+
+# Snowflake credentials & tokens
+*.toml
+.snowflake/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+*.env
+.venv/
+venv/
+
+# Test / sample documents
+docs/
