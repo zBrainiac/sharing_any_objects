@@ -23,6 +23,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   update-and-scan:
     runs-on: self-hosted
