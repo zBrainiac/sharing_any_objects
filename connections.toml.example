@@ -1,19 +1,19 @@
 # Copy this file to ~/.snowflake/connections.toml and fill in your values.
-# connections.toml takes precedence over config.toml in newer Snowflake connector versions.
+# Account: zs28104.eu-central-1
 
 [bank1]
-account = "<YOUR_ACCOUNT>"          # e.g. sfseeurope-demo_yourorg
-user = "bank1_user"
+account = "zs28104.eu-central-1"
+user = "BANK1_USER"
 role = "BANK1_ROLE"
 database = "ECO_DEV"
 schema = "ECOS_RAW_V001"
 warehouse = "MD_TEST_WH"
 authenticator = "programmatic_access_token"
-token = "<PAT_TOKEN>"               # Generate in Snowsight: Admin -> Security -> Programmatic Access Tokens
+token = "<PAT_TOKEN>"
 
 [bank2]
-account = "<YOUR_ACCOUNT>"
-user = "bank2_user"
+account = "zs28104.eu-central-1"
+user = "BANK2_USER"
 role = "BANK2_ROLE"
 database = "ECO_DEV"
 schema = "ECOS_RAW_V001"

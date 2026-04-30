@@ -4,7 +4,7 @@ Upload files to the multi-tenancy shared stage ECOS_RAW_ST_DOC_MT.
 Each file is registered in ECOS_RAW_TB_STAGE_FILES_MT with the given tenant_id.
 
 Usage:
-    python upload_mt.py --connection sfseeurope-mdaeppen --tenant-id BANK1 --files a.pdf b.pdf
+    python upload_mt.py --connection DEMO_MDAEPPEN --tenant-id BANK1 --files a.pdf b.pdf
 """
 
 import os

@@ -27,8 +27,8 @@ All Snowflake object names follow the [DataOpsBackbone naming standard](https://
 sharing_any_objects/
 ├── manifest.yml                    # DCM project manifest
 ├── pre_deploy.sql                  # Database, schema, DCM project creation
-├── post_deploy.sql                 # Secure view, RAP, stored procedure, grants
-├── github-workflow-verification_v1.sh
+├── post_deploy.sql                 # Secure view, RAP, stored procedure
+├── post_deployment_grants.sql      # Role grants and contacts (run with ACCOUNTADMIN)
 ├── .github/
 │   └── workflows/
 │       └── update-local-repo.yml   # CI/CD pipeline
@@ -55,8 +55,8 @@ sharing_any_objects/
     ============================          =================================
 
 +------------------+                      +------------------+
-|  BANK1 User      |                      | Consumer Account |
-|  (bank1_user)    |                      | (e.g. GK68488)   |
+|  BANK1_USER      |                      | Consumer Account |
+|  (BANK1_ROLE)    |                      | (e.g. GK68488)   |
 +--------+---------+                      +--------+---------+
          |                                         |
          v                                         v
@@ -128,6 +128,7 @@ sharing_any_objects/
 
 - Snowflake CLI >= 3.16 (`snow --version`)
 - A Snowflake connection configured (`~/.snowflake/connections.toml`)
+- Account: `zs28104.eu-central-1`
 
 ### First-Time Setup
 
@@ -144,8 +145,11 @@ snow dcm plan ECO_DEV.ECOS_RAW_V001.SHARING_OBJECTS -c <connection> --target DEV
 # 4. Deploy
 snow dcm deploy ECO_DEV.ECOS_RAW_V001.SHARING_OBJECTS -c <connection> --target DEV --alias "initial"
 
-# 5. Run post-deployment (secure view, RAP, stored procedure, grants)
+# 5. Run post-deployment (secure view, RAP, stored procedure)
 snow sql -f post_deploy.sql -c <connection> --role ACCOUNTADMIN
+
+# 6. Apply grants and contacts (requires ACCOUNTADMIN)
+snow sql -f post_deployment_grants.sql -c <connection> --role ACCOUNTADMIN
 ```
 
 ### CI/CD Pipeline
@@ -179,17 +183,17 @@ VALUES ('GK68488', 'BANK1_ROLE', 'BANK1');
 ## Requirements
 
 ```bash
-pip install snowflake-connector-python
+pip install snowflake-connector-python streamlit
 ```
 
 ## Connection Setup
 
-Add to `~/.snowflake/connections.toml` (see `connections.toml.example`):
+Copy `connections.toml.example` to `~/.snowflake/connections.toml` and fill in your PAT tokens:
 
 ```toml
 [bank1]
-account = "<YOUR_ACCOUNT>"
-user = "bank1_user"
+account = "zs28104.eu-central-1"
+user = "BANK1_USER"
 role = "BANK1_ROLE"
 database = "ECO_DEV"
 schema = "ECOS_RAW_V001"
@@ -220,7 +224,6 @@ python download_files.py --connection bank1 --output-dir ./downloads
 ### Streamlit app
 
 ```bash
-pip install streamlit
 streamlit run app/app.py
 ```
 
@@ -241,10 +244,12 @@ Tests are in `sqlunit/tests.sqltest` and validate:
 |------|-------------|
 | `manifest.yml` | DCM project manifest with DEV target |
 | `pre_deploy.sql` | Creates database, schema, DCM project |
-| `post_deploy.sql` | Secure view, RAP, stored procedure, grants |
+| `post_deploy.sql` | Secure view, RAP, stored procedure |
+| `post_deployment_grants.sql` | Role grants, warehouse access, contacts (ACCOUNTADMIN) |
 | `sources/definitions/infrastructure.sql` | Stage definition (DCM DEFINE) |
 | `sources/definitions/tables.sql` | Table definitions (DCM DEFINE) |
 | `sqlunit/tests.sqltest` | SQL validation tests |
 | `upload_mt.py` | Upload files with tenant registration |
 | `download_files.py` | Download files for the current role |
 | `app/app.py` | Streamlit file download portal |
+| `connections.toml.example` | Snowflake connection template |
