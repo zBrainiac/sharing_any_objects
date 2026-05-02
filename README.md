@@ -213,12 +213,12 @@ python upload_mt.py --connection <admin_connection> --tenant-id BANK1 --files in
 
 ### List available files
 ```bash
-python download_files.py --connection bank1 --list-only
+python3 download_files.py --connection bank1 --list-only
 ```
 
 ### Download files
 ```bash
-python download_files.py --connection bank1 --output-dir ./downloads
+python3 download_files.py --connection bank1 --output-dir ./downloads
 ```
 
 ### Streamlit app
