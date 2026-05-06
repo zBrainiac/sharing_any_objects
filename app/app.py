@@ -65,8 +65,8 @@ role = col_role.selectbox("Select Role", list(ROLE_CONNECTION_MAP.keys()), key="
 conn = get_connection(ROLE_CONNECTION_MAP[role])
 files = get_files(conn)
 
-business_units = sorted(set(f.get("BUSINESS_UNIT", "") for f in files if f.get("BUSINESS_UNIT")))
-file_types = sorted(set(f.get("FILE_TYPE", "") for f in files if f.get("FILE_TYPE")))
+business_units = sorted({f.get("BUSINESS_UNIT", "") for f in files if f.get("BUSINESS_UNIT")})
+file_types = sorted({f.get("FILE_TYPE", "") for f in files if f.get("FILE_TYPE")})
 
 selected_bu = col_bu.selectbox("Business Unit", ["All"] + business_units, key="filter_bu")
 selected_type = col_type.selectbox("File Type", ["All"] + file_types, key="filter_type")
